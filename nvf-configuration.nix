@@ -10,12 +10,6 @@
       name = "dracula";
       style = "dark";
     };
-    languages = {
-      rust.enable = true;
-      nix.enable = true;
-      python.enable = true;
-      html.enable = true;
-    };
     telescope.enable = true;
     mini.statusline.enable = true;
     autocomplete.nvim-cmp.enable = true;
@@ -33,6 +27,13 @@
         mode = "n";
         silent = true;
         action = "require('telescope.builtin').live_grep";
+        lua = true;
+      }
+      {
+        key = "<leader>bb";
+        mode = "n";
+        silent = true;
+        action = "require('telescope.builtin').buffers";
         lua = true;
       }
     ];
