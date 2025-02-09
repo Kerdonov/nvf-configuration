@@ -7,8 +7,13 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = { self, flake-parts, nixpkgs, nvf, ... } @ inputs:
+  outputs = { self, flake-parts, nixpkgs, nvf, ... } @ inputs: 
+  let
+    configModule = import ./default.nix;
+  in
   flake-parts.lib.mkFlake { inherit inputs; } {
+    # does not work right now
+    #flake.nixosModules.default = configModule;
     systems = [
       "x86_64-linux"
       "aarch64-linux"
@@ -16,25 +21,27 @@
       "aarch64-darwin"
     ];
 
-    perSystem = { system, ...}:
+    perSystem = { system, ... }:
     let
       pkgs = import nixpkgs { inherit system; };
       makeConfigurationWithLanguage = config_name: language_config: 
       (nvf.lib.neovimConfiguration {
         inherit pkgs;
-        modules = [
-          ./nvf-configuration.nix
-          language_config
-        ];
+        modules = [ configModule {
+                  programs.nii-vaga-fun.enable = true;
+                  programs.nii-vaga-fun.languages = language_config;
+                } ];
       }).neovim;
-      language_configs = {
-        rust = ./languages/rust.nix;
-        python = ./languages/python.nix;
-        java = ./languages/java.nix;
-        default = ./languages;
+      language_configurations = {
+        rust = ["rust"];
+        python = ["python"];
+        java = ["java"];
+        web = ["web"];
+        nix = ["nix"];
+        default = ["rust" "pyton" "java" "web" "nix"];
       };
     in {
-      packages = builtins.mapAttrs makeConfigurationWithLanguage language_configs;
+      packages = builtins.mapAttrs makeConfigurationWithLanguage language_configurations;
     };
   };
 }
