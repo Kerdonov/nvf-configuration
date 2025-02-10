@@ -12,7 +12,6 @@
     configModule = import ./default.nix;
   in
   flake-parts.lib.mkFlake { inherit inputs; } {
-    # does not work right now
     #flake.nixosModules.default = configModule;
     systems = [
       "x86_64-linux"
