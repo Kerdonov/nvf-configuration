@@ -1,12 +1,15 @@
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.programs.nii-vaga-fun;
 in {
   options.programs.nii-vaga-fun = {
     enable = lib.mkEnableOption "nii-vaga-fun";
     languages = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "rust" "web" "nix" "pyhon" "java" ];
+      default = ["rust" "web" "nix" "pyhon" "java"];
       description = "Currently supports values: 'rust', 'web' (html+css), 'nix', 'python', 'java'";
     };
   };
@@ -50,6 +53,11 @@ in {
           lua = true;
         }
       ];
+      lsp = {
+        enable = true;
+        inlayHints.enable = true;
+        formatOnSave = true;
+      };
       languages = {
         rust = lib.mkIf (builtins.elem "rust" cfg.languages) {
           enable = true;
@@ -58,13 +66,13 @@ in {
           format.enable = true;
         };
         html = lib.mkIf (builtins.elem "web" cfg.languages) {
-            enable = true;
-            treesitter.enable = true;
+          enable = true;
+          treesitter.enable = true;
         };
         css = lib.mkIf (builtins.elem "web" cfg.languages) {
-            enable = true;
-            lsp.enable = true;
-            treesitter.enable = true;
+          enable = true;
+          lsp.enable = true;
+          treesitter.enable = true;
         };
         nix = lib.mkIf (builtins.elem "nix" cfg.languages) {
           enable = true;
