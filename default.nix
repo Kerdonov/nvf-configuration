@@ -12,6 +12,10 @@ in {
       default = ["rust" "web" "nix" "pyhon" "java"];
       description = "Currently supports values: 'rust', 'web' (html+css), 'nix', 'python', 'java'";
     };
+    tidalPlugin = lib.mkOption {
+      type = lib.types.package;
+      description = "Add your vim-tidal plugin package here";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -90,6 +94,15 @@ in {
           enable = true;
           lsp.enable = true;
           treesitter.enable = true;
+        };
+      };
+      extraPlugins = {
+        tidal = lib.mkIf (builtins.elem "tidal" cfg.languages) {
+          package = cfg.tidalPlugin;
+          setup = ''
+            vim.g.maplocalleader = ","
+            vim.g.tidal_target = "terminal"
+          '';
         };
       };
     };
