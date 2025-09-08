@@ -95,6 +95,11 @@ in {
           lsp.enable = true;
           treesitter.enable = true;
         };
+        clang = lib.mkIf (builtins.elem "c" cfg.languages) {
+          enable = true;
+          lsp.enable = true;
+          treesitter.enable = true;
+        };
       };
       extraPlugins = {
         tidal = lib.mkIf (builtins.elem "tidal" cfg.languages) {
