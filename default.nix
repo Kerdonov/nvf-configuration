@@ -9,8 +9,8 @@ in {
     enable = lib.mkEnableOption "nii-vaga-fun";
     languages = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = ["rust" "web" "nix" "pyhon" "java"];
-      description = "Currently supports values: 'rust', 'web' (html+css), 'nix', 'python', 'java'";
+      default = ["rust" "web" "nix" "pyhon" "java" "c" "asm" "typst"];
+      description = "Currently supports values: 'rust', 'web' (html+css), 'nix', 'python', 'java' , 'c', 'asm', 'typst'";
     };
     tidalPlugin = lib.mkOption {
       type = lib.types.package;
@@ -99,6 +99,16 @@ in {
           enable = true;
           lsp.enable = true;
           treesitter.enable = true;
+        };
+        assembly = lib.mkIf (builtins.elem "asm" cfg.languages) {
+          enable = true;
+          lsp.enable = true;
+          treesitter.enable = true;
+        };
+        typst = lib.mkIf (builtins.elem "typst" cfg.languages) {
+          enable = true;
+          format.enable = true;
+          lsp.enable = true;
         };
       };
       extraPlugins = {

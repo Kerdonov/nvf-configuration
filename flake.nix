@@ -46,7 +46,9 @@
           nix = ["nix"];
           tidal = ["tidal"];
           c = ["c"];
-          default = ["rust" "pyton" "java" "web" "nix" "c"];
+          asm = ["asm"];
+          typst = ["typst"];
+          default = ["rust" "pyton" "java" "web" "nix" "c" "asm" "typst"];
         };
       in {
         packages = builtins.mapAttrs makeConfigurationWithLanguage language_configurations;
